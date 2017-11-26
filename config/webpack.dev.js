@@ -4,6 +4,10 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
+    output: {
+        filename: 'bundle.js',
+        publicPath: '/'
+    },
     plugins:[
         new webpack.HotModuleReplacementPlugin({})
     ],
@@ -13,7 +17,7 @@ module.exports = merge(common, {
         host:  '0.0.0.0',
         compress: true,
         hot: true,
-        hotOnly: true
+        hotOnly: true,
     }
 
 

@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: {
         app: './src/index.js',
-        vendor: ['vue','vuex','vue-router']
+        // vendor: ['vue','vuex','vue-router']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -12,7 +12,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.min.js'
+            'vue$': 'vue/dist/vue.common.js'
         }
     },
     module: {
