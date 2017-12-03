@@ -15,6 +15,9 @@ module.exports = {
             'vue$': 'vue/dist/vue.common.js'
         }
     },
+    externals: {
+
+    },
     module: {
         rules: [
             {
@@ -24,8 +27,16 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: "vue-loader"
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: 'file-loader'
             }
-        ]
+]
     },
     plugins: [
         new HtmlWebpackPlugin({

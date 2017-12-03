@@ -48,4 +48,24 @@ const blogUpdate = async (blog = {})=>{
     }
 };
 
-export { blogList, blogDetail, blogUpdate };
+// Create API
+const blogCreate = async (blog = {})=>{
+    try {
+        let formData = new FormData();
+        for (let key in blog) {
+            if (blog.hasOwnProperty(key)){
+                formData.append(key, blog[key]);
+            }
+        }
+        let res = await fetch(base+'blog/create',{
+            method: 'post',
+            body: formData
+        });
+        let data =  await res.json();
+        return { ok:true,data:data };
+    } catch(err) {
+        return { ok:false,err:err };
+    }
+};
+
+export { blogList, blogDetail, blogUpdate, blogCreate };

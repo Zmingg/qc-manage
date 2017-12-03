@@ -1,0 +1,89 @@
+<template>
+    <div class="box" v-show="show">
+        <div class="warp" @click="close"></div>
+        <div class="frame" id="scrolling-container">
+            <div id="quill-container">
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import Quill from 'quill';
+import { blogDetail } from '../../api/blog';
+export default {
+
+    data(){
+        return {
+            blog: {},
+            show: false
+        }
+    },
+
+    mounted(){
+        this.init();
+        this.$on('open', id => this.open(id));
+    },
+
+    methods: {
+        init: function () {
+            this.quill = new Quill('#quill-container', {
+                scrollingContainer: '#scrolling-container',
+                readOnly: true,
+                theme: 'bubble'
+            });
+
+        },
+        open: async function (id) {
+            let res = await blogDetail(id);
+            if (res.ok) {
+                this.blog = res.data;
+                this.$nextTick(()=>{
+                    this.quill.setContents(JSON.parse(this.blog.delta));
+                    this.show = true;
+                })
+            }
+        },
+        close: function () {
+            this.show = false;
+        }
+
+    }
+
+}
+</script>
+<style scoped>
+@import "https://cdn.quilljs.com/1.3.4/quill.bubble.css";
+.box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box .warp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    opacity: 0.5;
+    z-index: -100;
+}
+.frame {
+    width: 90%;
+    height: 70%;
+    max-width: 800px;
+    max-height: 600px;
+    background: #fff;
+    /*border: solid 1px #333;*/
+    box-shadow: 0 0 20px #888888;
+    white-space: pre-wrap;
+    word-break: break-all;
+
+}
+
+</style>

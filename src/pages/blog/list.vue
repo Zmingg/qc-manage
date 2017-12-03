@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <h5>Blog List - 共 {{ total }} 条数据</h5>
+        <h5>Blog List - 共 {{ total }} 行 （ {{curpage}} / {{pages}} 页 ）</h5>
         <ul class="list">
             <li class="item" v-for="blog in blogs">
                 <div class="title">
@@ -15,28 +15,36 @@
             </li>
         </ul>
         <div class="info">
-            <span class="button" @click="prev" :class="{disable: curpage<=1}">前一页</span>
-            <span>|</span>
-            <span class="button" @click="next" :class="{disable: !hasMore}">下一页</span>
-            <span>( 当前 {{curpage}} / {{pages}} 总页数 )</span>
+            <el-button size="small" @click="create">添加新的文章</el-button>
+            <el-button-group>
+                <el-button size="small" :disabled="curpage<=1" icon="el-icon-arrow-left" @click="prev">上一页</el-button>
+                <el-button size="small" :disabled="!hasMore" @click="next">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+            </el-button-group>
         </div>
+        <preview ref="preview"></preview>
 
     </div>
 </template>
 <script>
 import { blogList } from '../../api/blog';
+import Preview from '../../components/blog/preview.vue';
+import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 export default {
+    components: {
+        ElButton,
+        Preview
+    },
     data(){
         return {
             blogs: [],
-            curpage: 1,
+            curpage: 0,
             pages: 0,
             hasMore: false,
-            total: 0
+            total: 0,
         }
     },
     mounted(){
-        this.list();
+        this.list(1);
     },
     methods: {
         list: async function(page){
@@ -65,7 +73,10 @@ export default {
             }
             let id = e.target.parentNode.dataset.id;
             let act = e.target.dataset.act;
-            this[act](id);
+            if (act === 'create') {
+                return this.create();
+            }
+            return this[act](id);
 
         },
         update: async function (id) {
@@ -77,28 +88,31 @@ export default {
         del: function () {
 
         },
-        view: function () {
-            
+        view: function (id) {
+            this.$refs.preview.$emit('open', id);
+        },
+        create: function () {
+            this.$router.push({ name: 'blog_create' });
         }
     }
 }
 </script>
 <style scoped>
-.box {
-    -webkit-user-select: none;
-    user-select: none;
-}
 .list {
     margin: 15px 0;
     height: 350px;
     line-height: 35px;
-    border-top: solid 1px #666;
-    font-size: 15px;
-    color: #4e4e4e;
+    border-top: solid 1px #9b9b9b;
+    font-size: 14px;
+    color: #555555;
 }
 .item {
     height: 35px;
-    border-bottom: solid 1px #666;
+    border-bottom: solid 1px #9b9b9b;
+    padding-left: 5px;
+}
+.item:hover {
+    background: #ecf5ff;
 }
 .title {
     float: left;
@@ -117,7 +131,12 @@ export default {
     text-align: center;
 }
 .info {
+    margin-top: 10px;
     font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .button {
     cursor: pointer;
