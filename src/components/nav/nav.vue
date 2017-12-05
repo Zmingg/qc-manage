@@ -12,11 +12,11 @@ export default {
             navs: [
                 {name: '首页', path: '/', icon:'el-icon-location'},
                 {name: '文章', icon:'el-icon-menu', children: [
-                    {name: '文章管理', path: 'blog'},
-                    {name: '分类管理', path: 'cate'},
-                    {name: '统计分析', path: 'analysis'}
+                    {name: '文章管理', path: '/blog'},
+                    {name: '分类管理', path: '/cate'},
+                    {name: '统计分析', path: '/analysis'}
                 ]},
-                {name: '设置', icon:'el-icon-setting', path: 'setting'}
+                {name: '设置', icon:'el-icon-setting', path: '/setting'}
             ]
         }
     }

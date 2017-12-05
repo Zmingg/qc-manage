@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import { blogList } from '../../api/blog';
+import { blogList, blogDelete } from '../../api/blog';
 import Preview from '../../components/blog/preview.vue';
 import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 export default {
@@ -85,8 +85,26 @@ export default {
                 params: {id: id}
             });
         },
-        del: function () {
-
+        del: function (id) {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await blogDelete(id);
+                if(res.ok){
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.list(1);
+                }
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
         view: function (id) {
             this.$refs.preview.$emit('open', id);

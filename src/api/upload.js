@@ -17,8 +17,8 @@ const uploader = (prefix) => {
     return Qiniu.uploader({
         runtimes: 'html5,html4',
         browse_button: 'pickfiles',
-        container: 'container',
-        drop_element: 'container',
+        // container: 'container',
+        // drop_element: 'container',
         dragdrop: true,
         chunk_size: '1mb',
         uptoken_url: server + 'upload_token',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）

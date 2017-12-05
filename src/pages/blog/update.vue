@@ -104,7 +104,6 @@ export default {
             let toolbarOptions = {
                 container: toolbarContainer,
                 handlers: {
-                    // handlers object will be merged with default handlers object
                     'image': function () {
                         self.imgAdding = true;
                         self.range = self.quill.getSelection();
@@ -117,12 +116,7 @@ export default {
                     toolbar: toolbarOptions
                 },
             });
-            if (this.blog.delta){
-                this.quill.setContents(JSON.parse(this.blog.delta));
-            } else {
-                this.quill.clipboard.dangerouslyPasteHTML(this.blog.content);
-            }
-
+            this.quill.clipboard.dangerouslyPasteHTML(this.blog.content);
         },
         getDetail: async function () {
             let res = await blogDetail(this.$route.params.id);
@@ -140,7 +134,7 @@ export default {
             }
         },
         update: async function () {
-            this.blog.delta = JSON.stringify(this.quill.getContents().ops);
+            this.blog.delta = JSON.stringify(this.quill.getContents());
             this.blog.content = this.quill.container.firstChild.innerHTML;
             let res = await blogUpdate(this.blog);
             if (res.ok) {
@@ -165,8 +159,7 @@ export default {
 .box {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
 }
 h5 {
     margin-bottom: 5px;
@@ -181,10 +174,10 @@ h5 {
     width: 100%;
 }
 .short {
+    display: block;
     width: 100%;
-    height: 30px;
     max-width: 200px;
-    margin-top: 10px;
+    margin: 10px auto;
 }
 #editor {
     flex: 1;

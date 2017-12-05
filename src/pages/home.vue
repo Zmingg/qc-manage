@@ -30,12 +30,6 @@ export default {
         return {
             title: 'This is Manage for Blog.'
         }
-    },
-    computed: {
-
-    },
-    mounted(){
-
     }
 }
 </script>

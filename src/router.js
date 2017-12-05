@@ -24,7 +24,7 @@ const router = new VueRouter({
             { name: 'analysis', path: 'analysis', component: Analysis },
             { name: 'setting', path: 'setting', component: Setting },
         ]},
-        { name: 'pass', path: 'pass', component: Pass }
+        { name: 'pass', path: '/pass', component: Pass }
 
     ]
 });

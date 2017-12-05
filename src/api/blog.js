@@ -68,4 +68,20 @@ const blogCreate = async (blog = {})=>{
     }
 };
 
-export { blogList, blogDetail, blogUpdate, blogCreate };
+// blogDelete
+const blogDelete = async (id)=>{
+    try {
+        let formData = new FormData();
+        formData.append('id', id);
+        let res = await fetch(base+'blog/delete',{
+            method: 'post',
+            body: formData
+        });
+        let data =  await res.json();
+        return { ok:true,data:data };
+    } catch(err) {
+        return { ok:false,err:err };
+    }
+};
+
+export { blogList, blogDetail, blogUpdate, blogCreate, blogDelete };

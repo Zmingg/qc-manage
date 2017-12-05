@@ -1,14 +1,13 @@
 <template>
     <div class="box" v-show="show">
         <div class="warp" @click="close"></div>
-        <div class="frame" id="scrolling-container">
-            <div id="quill-container">
-            </div>
+        <div class="frame" v-html="blog.content">
+            <!--<div id="quill-container">-->
+            <!--</div>-->
         </div>
     </div>
 </template>
 <script>
-import Quill from 'quill';
 import { blogDetail } from '../../api/blog';
 export default {
 
@@ -20,25 +19,15 @@ export default {
     },
 
     mounted(){
-        this.init();
         this.$on('open', id => this.open(id));
     },
 
     methods: {
-        init: function () {
-            this.quill = new Quill('#quill-container', {
-                scrollingContainer: '#scrolling-container',
-                readOnly: true,
-                theme: 'bubble'
-            });
-
-        },
         open: async function (id) {
             let res = await blogDetail(id);
             if (res.ok) {
                 this.blog = res.data;
                 this.$nextTick(()=>{
-                    this.quill.setContents(JSON.parse(this.blog.delta));
                     this.show = true;
                 })
             }
@@ -78,9 +67,10 @@ export default {
     height: 70%;
     max-width: 800px;
     max-height: 600px;
+    padding: 10px;
     background: #fff;
-    /*border: solid 1px #333;*/
     box-shadow: 0 0 20px #888888;
+    overflow-y: auto;
     white-space: pre-wrap;
     word-break: break-all;
 

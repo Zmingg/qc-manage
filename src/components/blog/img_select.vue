@@ -2,15 +2,28 @@
     <div class="box" @click="clickHandle">
         <div class="warp"></div>
         <div class="frame">
-            <button type="button" title="upload" class="icon" @click="upload" id="pickfiles"></button>
-            <div class="icon">URL</div>
-            <div id="container"></div>
+            <el-button id="pickfiles" size="mini">本地上传</el-button>
+            <div class="row">
+                <el-input v-model="url" size="mini">
+                    <el-button slot="append" @click="insertUrl">插入</el-button>
+                </el-input>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import { uploader } from '../../api/upload';
+import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
+import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 export default {
+    components: {
+        ElInput,
+        ElButton},
+    data(){
+        return {
+            url: ''
+        }
+    },
 
     mounted(){
         let up = uploader('image');
@@ -29,9 +42,11 @@ export default {
                 this.$emit('close');
             }
         },
-        upload: function () {
-
-
+        insertUrl: function () {
+            if (this.url !== '') {
+                this.$emit('insert', this.url);
+            }
+            this.$emit('close');
         }
     }
 
@@ -59,16 +74,18 @@ export default {
     z-index: -100;
 }
 .frame {
-    width: 200px;
-    height: 80px;
+    width: 300px;
+    height: 100px;
+    padding: 10px;
     background: #fff;
     border-radius: 5px;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end;
 }
-.icon {
-    width: 50px;
+.row {
+    width: 100%;
     height: 30px;
     line-height: 30px;
     text-align: center;
