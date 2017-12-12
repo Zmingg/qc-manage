@@ -2,7 +2,7 @@
     <div class="box" @click="clickHandle">
         <div class="warp"></div>
         <div class="frame">
-            <el-button id="pickfiles" size="mini">本地上传</el-button>
+            <el-button id="image" size="mini">本地上传</el-button>
             <div class="row">
                 <el-input v-model="url" size="mini">
                     <el-button slot="append" @click="insertUrl">插入</el-button>
@@ -26,7 +26,7 @@ export default {
     },
 
     mounted(){
-        let up = uploader('image');
+        let up = uploader('image','image');
         up.bind('FileUploaded',(up, file, info)=>{
              let domain = up.getOption('domain');
              let res = JSON.parse(info.response);

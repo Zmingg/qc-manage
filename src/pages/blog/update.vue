@@ -2,11 +2,11 @@
     <div class="box">
         <h5>Blog Update</h5>
 
-        <el-input class="input" v-model="blog.title" placeholder="请输入标题">
+        <el-input size="small" class="input" v-model="blog.title" placeholder="请输入标题">
             <i slot="suffix" class="el-input__icon">文章标题&nbsp</i>
         </el-input>
 
-        <el-select v-model="blog.cate_id" placeholder="请选择类别" class="input">
+        <el-select size="small" v-model="blog.cate_id" placeholder="请选择类别" class="input">
             <el-option
                     v-for="cate in cates"
                     :key="cate.id"
@@ -17,17 +17,22 @@
             </el-option>
         </el-select>
 
-        <el-input class="input" v-model="blog.tags">
+        <el-input size="small" class="input" v-model="blog.tags">
             <i slot="suffix" class="el-input__icon">标签 ( 以 , 隔开 )</i>
         </el-input>
 
-        <el-date-picker class="input"
-                v-model="datetime"
-                type="datetime"
-                placeholder="选择日期">
+        <el-date-picker size="small" class="input"
+                        v-model="datetime"
+                        type="datetime"
+                        placeholder="选择日期">
         </el-date-picker>
 
-        <el-input class="input-full"
+        <el-input size="small" class="input" disabled v-model="blog.thumb_img">
+            <el-button slot="append" @click="thumbPreview">查看缩略图</el-button>
+            <el-button slot="append" id="thumb">重新上传</el-button>
+        </el-input>
+
+        <el-input size="small" class="input-full"
                 type="textarea"
                 :rows="2"
                 placeholder="暂无摘要内容"
@@ -36,27 +41,36 @@
 
         <div id="editor"></div>
 
-        <el-button class="short" @click="update">确认更新</el-button>
+        <el-button size="small" class="short" @click="update">确认更新</el-button>
 
         <img-select v-show="imgAdding" @close="closeImgSelect" @insert="insertImg"></img-select>
+
+        <thumb-preview ref="thumb"></thumb-preview>
 
     </div>
 </template>
 <script>
 import { blogDetail, blogUpdate } from '../../api/blog';
 import { cateList } from '../../api/cate';
+import { domain, uploader } from '../../api/upload';
 import Quill from 'quill';
-import ImgSelect from '../../components/blog/img_select.vue';
+import ImgSelect from '../../components/blog/img-select.vue';
+import ThumbPreview from '../../components/blog/thumb-preview.vue';
+import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
+import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 export default {
     components: {
-        ImgSelect
+        ElInput,
+        ElButton,
+        ImgSelect,
+        ThumbPreview
     },
     data(){
         return {
             blog: {},
             cates: [],
             imgAdding: false,
-            range: {}
+            range: {},
         }
     },
 
@@ -77,6 +91,14 @@ export default {
     created(){
         this.getDetail();
         this.getCates();
+    },
+
+    mounted(){
+        let thumb = uploader('thumb','thumb');
+        thumb.bind('FileUploaded',(up, file, info)=>{
+            let res = JSON.parse(info.response);
+            this.blog.thumb_img = res.key;
+        });
     },
 
     methods: {
@@ -134,13 +156,11 @@ export default {
             }
         },
         update: async function () {
-            this.blog.delta = JSON.stringify(this.quill.getContents());
             this.blog.content = this.quill.container.firstChild.innerHTML;
             let res = await blogUpdate(this.blog);
             if (res.ok) {
                 this.$router.go(-1);
             }
-
         },
         closeImgSelect: function () {
             this.imgAdding = false;
@@ -148,6 +168,9 @@ export default {
         insertImg: function (url) {
             this.quill.insertEmbed(this.range.index, 'image', url, 'image');
         },
+        thumbPreview: function () {
+            this.$refs.thumb.$emit('open', domain + this.blog.thumb_img);
+        }
 
     }
 }
@@ -181,5 +204,6 @@ h5 {
 }
 #editor {
     flex: 1;
+    min-height: 200px;
 }
 </style>

@@ -13,10 +13,10 @@ const uploadToken = async () => {
 
 };
 
-const uploader = (prefix) => {
-    return Qiniu.uploader({
+const uploader = (el, prefix) => {
+    return new QiniuJsSDK().uploader({
         runtimes: 'html5,html4',
-        browse_button: 'pickfiles',
+        browse_button: el,
         // container: 'container',
         // drop_element: 'container',
         dragdrop: true,
@@ -89,4 +89,5 @@ const uploader = (prefix) => {
         }
     });
 };
-export { uploadToken, uploader };
+
+export { domain, uploadToken, uploader };

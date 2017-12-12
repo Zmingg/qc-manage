@@ -46,7 +46,7 @@ import { mapState } from 'vuex';
 import { blogCreate } from '../../api/blog';
 import { cateList } from '../../api/cate';
 import Quill from 'quill';
-import ImgSelect from '../../components/blog/img_select.vue';
+import ImgSelect from '../../components/blog/img-select.vue';
 export default {
     components: {
         ImgSelect
