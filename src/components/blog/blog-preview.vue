@@ -43,14 +43,11 @@ export default {
 <style scoped>
 @import "https://cdn.quilljs.com/1.3.4/quill.bubble.css";
 .box {
-    width: 100%;
-    height: 100%;
     position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    right: 0;
 }
 .box .warp {
     position: absolute;
@@ -63,6 +60,10 @@ export default {
     z-index: -100;
 }
 .frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     width: 90%;
     height: 70%;
     max-width: 800px;

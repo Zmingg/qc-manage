@@ -10,4 +10,13 @@ const cateList = async ()=>{
     }
 };
 
-export { cateList };
+const cateDetail = async (id) => {
+    try {
+        let res = await fetch(base + 'cate/' + id);
+        return await res.json();
+    } catch(err) {
+        return { ok:false,err:err };
+    }
+};
+
+export { cateList, cateDetail };

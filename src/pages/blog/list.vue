@@ -27,7 +27,7 @@
 </template>
 <script>
 import { blogList, blogDelete } from '../../api/blog';
-import Preview from '../../components/blog/preview.vue';
+import Preview from '../../components/blog/blog-preview.vue';
 import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 export default {
     components: {
@@ -43,7 +43,7 @@ export default {
             total: 0,
         }
     },
-    mounted(){
+    created(){
         this.list(1);
     },
     methods: {

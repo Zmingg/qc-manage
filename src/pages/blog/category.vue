@@ -6,19 +6,22 @@
                     {{ cate.name }}
                 </div>
                 <div class="controls" :data-id="cate.id">
-                    <span class="btn" @click="handleEdit">修改</span>
-                    <span class="btn" @click="handleDelete">删除</span>
+                    <span class="btn" @click="handleEdit(cate.id)">修改</span>
+                    <span class="btn" @click="handleDelete(cate.id)">删除</span>
                 </div>
             </li>
         </ul>
-
+        <cate-preview ref="preview"></cate-preview>
     </div>
 </template>
 <script>
 import { cateList } from '../../api/cate';
+import CatePreview from '../../components/blog/cate-preview.vue';
 import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 export default {
-    components: {ElButton},
+    components: {
+        ElButton, CatePreview
+    },
     data(){
         return {
             cates: []
@@ -32,8 +35,6 @@ export default {
             });
         }
     },
-    // 路由改变前，组件就已经渲染完了
-    // 逻辑稍稍不同
     async beforeRouteUpdate (to, from, next) {
         let res = await cateList();
         if(res.ok){
@@ -43,13 +44,6 @@ export default {
         }
     },
     methods: {
-        getCates: async function () {
-            let res = await cateList();
-            if (res.ok) {
-                this.cates = res.ok;
-                callback();
-            }
-        },
         action: function (e) {
             if (e.target.tagName !== 'SPAN') {
                 return;
@@ -62,13 +56,11 @@ export default {
             return this[act](id);
 
         },
-        handleEdit: function (id,row) {
-            console.log('edit',id)
-            console.log(row)
+        handleEdit: function (id) {
+            this.$refs.preview.$emit('open', id);
         },
         handleDelete: function (id,row) {
             console.log('delete',id)
-            console.log(row)
         }
     }
 }
@@ -117,5 +109,5 @@ export default {
     background: #fff;
     cursor: pointer;
     transition: 0.3s;
- }
+}
 </style>
