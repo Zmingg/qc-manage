@@ -20,8 +20,8 @@ const router = new VueRouter({
             { name: 'blog', path: 'blog', component: Blog },
             { name: 'blog_update', path: 'blog/update/:id', component: BlogUpdate },
             { name: 'blog_create', path: 'blog/create', component: BlogCreate },
-            { name: 'cate', path: 'cate', component: Category },
-            { name: 'analysis', path: 'analysis', component: Analysis },
+            { name: 'cate', path: 'blog/cate', component: Category },
+            { name: 'analysis', path: 'blog/analysis', component: Analysis },
             { name: 'setting', path: 'setting', component: Setting },
         ]},
         { name: 'pass', path: '/pass', component: Pass }
