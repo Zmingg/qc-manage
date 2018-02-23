@@ -8,20 +8,22 @@ import Blog from './pages/blog/list.vue';
 import BlogUpdate from './pages/blog/update.vue';
 import BlogCreate from './pages/blog/create.vue';
 import Category from './pages/blog/category.vue';
-import Analysis from './pages/blog/analysis.vue';
+import Music from './pages/music/index.vue';
+import MusicUpload from './pages/music/upload.vue';
 import Setting from './pages/setting.vue';
 import storage from './lib/storage';
 
 const router = new VueRouter({
     mode:'history',
     routes:[
-        { path: '/', component: Home, children: [
-            { name: 'home', path: '', component: Index },
+        { path: '/', component: Index, children: [
+            { name: 'home', path: '', component: Home },
             { name: 'blog', path: 'blog', component: Blog },
             { name: 'blog_update', path: 'blog/update/:id', component: BlogUpdate },
             { name: 'blog_create', path: 'blog/create', component: BlogCreate },
-            { name: 'cate', path: 'blog/cate', component: Category },
-            { name: 'analysis', path: 'blog/analysis', component: Analysis },
+            { name: 'blog_cate', path: 'blog/cate', component: Category },
+            { name: 'music', path: 'music', component: Music },
+            { name: 'music_upload', path: 'music/upload', component: MusicUpload },
             { name: 'setting', path: 'setting', component: Setting },
         ]},
         { name: 'pass', path: '/pass', component: Pass }

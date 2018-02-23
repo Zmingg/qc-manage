@@ -26,6 +26,13 @@
                         placeholder="选择日期">
         </el-date-picker>
 
+        <el-input size="small" class="input" disabled v-model="blog.thumb_img">
+            <el-button slot="append" @click="thumbPreview">查看缩略图</el-button>
+            <el-button slot="append" id="thumb">重新上传</el-button>
+        </el-input>
+
+        <thumb-preview ref="thumb"></thumb-preview>
+
         <el-input class="input"
                   type="textarea"
                   :rows="2"
@@ -45,16 +52,19 @@
 import { mapState } from 'vuex';
 import { blogCreate } from '../../api/blog';
 import { cateList } from '../../api/cate';
+import { domain, uploader } from '../../api/upload';
 import Quill from 'quill';
 import ImgSelect from '../../components/blog/img-select.vue';
+import ThumbPreview from '../../components/blog/thumb-preview.vue';
 export default {
     components: {
-        ImgSelect
+        ImgSelect, ThumbPreview
     },
     data(){
         return {
             blog: {
-                created_at: 0
+                created_at: 0,
+                thumb_img: 'thumb/default.jpg'
             },
             cates: [],
             imgAdding: false,
@@ -85,6 +95,11 @@ export default {
 
     mounted(){
         this.initEditor();
+        let thumb = uploader('thumb','thumb');
+        thumb.bind('FileUploaded',(up, file, info)=>{
+            let res = JSON.parse(info.response);
+            this.blog.thumb_img = res.key;
+        });
     },
 
     methods: {
@@ -134,23 +149,27 @@ export default {
             }
         },
         create: async function () {
-            this.blog.delta = JSON.stringify(this.quill.getContents().ops);
             this.blog.content = this.quill.container.firstChild.innerHTML;
             this.blog.updated_at = this.blog.created_at;
             this.blog.user_id = this.user.id;
-            this.blog.thumb_img = 'thumb_img';
             let res = await blogCreate(this.blog);
             if (res.ok) {
                 this.$router.go(-1);
             }
 
         },
+
         closeImgSelect: function () {
             this.imgAdding = false;
         },
+
         insertImg: function (url) {
             this.quill.insertEmbed(this.range.index, 'image', url, 'image');
         },
+
+        thumbPreview: function () {
+            this.$refs.thumb.$emit('open', domain + this.blog.thumb_img);
+        }
 
     }
 }

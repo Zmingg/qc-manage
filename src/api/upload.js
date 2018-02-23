@@ -1,26 +1,19 @@
 import 'babel-polyfill';
-const server = 'http://127.0.0.1:3000/';
-const domain = 'http://p04p94ehj.bkt.clouddn.com/';
+const serverBlog = 'http://127.0.0.1:3000/';
+const serverMusic = 'http://127.0.0.1:3001/';
+let domain = {};
+domain.blog = 'http://p04p94ehj.bkt.clouddn.com/';
+domain.musicP = 'http://oxjyut4f0.bkt.clouddn.com/';
+domain.musicS = 'http://ow7kqez1l.bkt.clouddn.com/';
 
-const uploadToken = async () => {
-    try {
-        let res = await fetch(server + 'upload_token');
-        let data =  await res.json();
-        return { ok:true,data:data };
-    } catch(err) {
-        return { ok:false,err:err };
-    }
-
-};
-
-const uploader = (el, prefix) => {
+const uploader = (el, server, domain, prefix) => {
     return new QiniuJsSDK().uploader({
         runtimes: 'html5,html4',
         browse_button: el,
         // container: 'container',
         // drop_element: 'container',
         dragdrop: true,
-        chunk_size: '1mb',
+        chunk_size: '4mb',
         uptoken_url: server + 'upload_token',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
         get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
         // downtoken_url: '/downtoken',
@@ -28,7 +21,7 @@ const uploader = (el, prefix) => {
         // save_key: true,                  // 默认 false。若在服务端生成 uptoken 的上传策略中指定了 `save_key`，则开启，SDK在前端将不对key进行任何处理
         domain: domain,     // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
         // container: 'container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
-        max_file_size: '1mb',             // 最大文件体积限制
+        max_file_size: '30mb',             // 最大文件体积限制
         max_retries: 3,                     // 上传失败最大重试次数
         // drop_element: 'container',          // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
         auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
@@ -90,4 +83,4 @@ const uploader = (el, prefix) => {
     });
 };
 
-export { domain, uploadToken, uploader };
+export { serverBlog, serverMusic, domain, uploader };

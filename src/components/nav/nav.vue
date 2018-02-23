@@ -14,11 +14,10 @@ export default {
                 {name: '文章', icon:'el-icon-menu', children: [
                     {name: '文章管理', path: '/blog'},
                     {name: '分类管理', path: '/blog/cate'},
-                    {name: '统计分析', path: '/blog/analysis'}
                 ]},
                 {name: '音乐', icon:'el-icon-menu', children: [
-                    {name: '数据概要', path: '/index'},
-                    {name: '音乐上传', path: '/upload'}
+                    {name: '数据概要', path: '/music'},
+                    {name: '音乐上传', path: '/music/upload'}
                 ]},
                 {name: '设置', icon:'el-icon-setting', path: '/setting'}
             ]

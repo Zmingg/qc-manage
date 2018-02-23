@@ -20,15 +20,5 @@ const userSignIn = async (user)=>{
     }
 };
 
-// userSignOut
-// const userSignOut = async ()=>{
-//     try {
-//         let res = await fetch(base+'sign_out');
-//         let data =  await res.json();
-//         return { ok:true,data:data };
-//     } catch(err) {
-//         return { ok:false,err:err };
-//     }
-// };
 
 export { userSignIn };
