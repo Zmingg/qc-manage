@@ -13,7 +13,7 @@ const uploader = (el, server, domain, prefix) => {
         // container: 'container',
         // drop_element: 'container',
         dragdrop: true,
-        chunk_size: '4mb',
+        // chunk_size: '4mb',
         uptoken_url: server + 'upload_token',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
         get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的 uptoken
         // downtoken_url: '/downtoken',
@@ -83,4 +83,16 @@ const uploader = (el, server, domain, prefix) => {
     });
 };
 
-export { serverBlog, serverMusic, domain, uploader };
+const uploadToken = async (server) => {
+    let base = (server === 'music')
+        ? serverMusic
+        : serverBlog;
+    try {
+        let res = await fetch(base + 'upload_token');
+        return await res.json();
+    } catch (err) {
+        return { ok: false, data: err };
+    }
+};
+
+export { serverBlog, serverMusic, domain, uploader, uploadToken };
