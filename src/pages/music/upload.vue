@@ -1,7 +1,8 @@
 <template>
     <div>
         <h5>上传歌曲</h5>
-        <el-button slot="append" id="audio-upload">上传歌曲文件</el-button>
+        <el-button slot="append" @click="selectAudio">上传歌曲文件</el-button>
+        <input type="file" id="audio-upload" hidden/>
         <ul class="state">
             <li v-for="audio,index in audios">
                 <el-collapse v-model="activeName" accordion>
@@ -45,7 +46,7 @@
     </div>
 </template>
 <script>
-import { serverMusic, domain, uploader, uploadToken } from '../../api/upload';
+import { serverMusic, domain, uploader, uploadToken, upload } from '../../api/upload';
 import { apiSingers, apiDiscs, apiAudioCreate } from '../../api/music';
 import * as qiniu from 'qiniu-js';
 export default {
@@ -60,34 +61,9 @@ export default {
         }
     },
 
-    created() {
+    mounted() {
         this.getSingers();
         this.getDiscs();
-        this.getToken();
-    },
-
-    mounted() {
-        let audios = this.audios;
-        let audioUploader = uploader('audio-upload',serverMusic,domain.musicS,'audio');
-        audioUploader.bind('FilesAdded', (up, files)=>{
-            plupload.each(files, function (file) {
-                file.sids = [1];
-                file.did = 1;
-                file.src = '';
-                file.lyric = '';
-                audios.push(file);
-            });
-        });
-        audioUploader.bind('FileUploaded',(up, file, info)=>{
-            for (let audio of this.audios) {
-                if (audio.id === file.id) {
-                    audio.src = JSON.parse(info.response).key;
-                }
-            }
-        });
-
-        let lyricUploader = uploader('lyric-upload',serverMusic,domain.musicS,'lyric');
-
     },
 
     methods: {
@@ -103,12 +79,6 @@ export default {
                 this.discs = res.data;
             }
         },
-        getToken: async function () {
-            let res = await uploadToken('music');
-            if (res.ok) {
-                this.uploadToken = res.uptoken;
-            }
-        },
         saveAudio: async function (audio) {
             let res = apiAudioCreate({
                 title: audio.title,
@@ -119,37 +89,74 @@ export default {
                 sids: audio.sids
             });
         },
-        selectLyric: function (audio) {
+        selectAudio: function () {
+            let input = document.getElementById('audio-upload');
+            input.onchange = () => {
+                let file = input.files[0];
+                let audio = {
+                    name: file.name,
+                    title: file.name,
+                    sub_title: '',
+                    sids: [1],
+                    did: 1,
+                    src: '',
+                    lyric: '',
+                    percent: 0
+                };
 
+                this.audios.push(audio);
+                let options = {
+                    server: 'music',
+                    perfix: 'audio'
+                };
+                upload(file, options, {
+                    next(res){
+                        audio.percent = res.total.percent;
+                    },
+                    error(err){
+                        console.log(err)
+                    },
+                    complete(res){
+                        input = null;
+                        audio.src = options.perfix + '/' + res.key;
+                    }
+                });
+            };
+            let clickTime = setTimeout(()=>{
+                clearTimeout(clickTime);
+                clickTime = null;
+                input.click();
+            }, 500);
+        },
+
+        selectLyric: function (audio) {
             let input = document.createElement('input');
             input.type = 'file';
             input.onchange = () => {
                 this.uploadLyric(input.files[0], (key) => {
+                    input = null;
                     audio.lyric = key;
                     console.log(key)
                 });
             };
-            input.click();
-
+            let clickTime = setTimeout(()=>{
+                clearTimeout(clickTime);
+                clickTime = null;
+                input.click();
+            }, 500);
         },
         uploadLyric: function (file, callback) {
-            let config = {
-                useCdnDomain: false,
-                region: qiniu.region.z0
+            let options = {
+                server: 'music',
+                perfix: 'lyric'
             };
-            let putExtra = {
-                fname: "",
-                params: {},
-                mimeType: null
-            };
-            let observable = qiniu.upload(file, file.name, this.uploadToken, putExtra, config);
-
-            observable.subscribe((res) => {}, (err) => {
-                console.log(err);
-            }, (res) => {
-                console.log(res);
-                callback(file.name);
-            });
+            upload(file, options, {
+                next(res){},
+                error(err){},
+                complete(res){
+                    callback(options.perfix + '/' + res.key)
+                }
+            })
         }
     }
 }

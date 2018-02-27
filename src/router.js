@@ -10,6 +10,8 @@ import BlogCreate from './pages/blog/create.vue';
 import Category from './pages/blog/category.vue';
 import Music from './pages/music/index.vue';
 import MusicUpload from './pages/music/upload.vue';
+import MusicSinger from './pages/music/singer.vue';
+import MusicDisc from './pages/music/disc.vue';
 import Setting from './pages/setting.vue';
 import storage from './lib/storage';
 
@@ -24,6 +26,8 @@ const router = new VueRouter({
             { name: 'blog_cate', path: 'blog/cate', component: Category },
             { name: 'music', path: 'music', component: Music },
             { name: 'music_upload', path: 'music/upload', component: MusicUpload },
+            { name: 'music_singer', path: 'music/singer', component: MusicSinger },
+            { name: 'music_disc', path: 'music/disc', component: MusicDisc },
             { name: 'setting', path: 'setting', component: Setting },
         ]},
         { name: 'pass', path: '/pass', component: Pass }

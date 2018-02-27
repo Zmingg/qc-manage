@@ -17,7 +17,9 @@ export default {
                 ]},
                 {name: '音乐', icon:'el-icon-menu', children: [
                     {name: '数据概要', path: '/music'},
-                    {name: '音乐上传', path: '/music/upload'}
+                    {name: '音乐上传', path: '/music/upload'},
+                    {name: '管理歌手', path: '/music/singer'},
+                    {name: '管理专辑', path: '/music/disc'},
                 ]},
                 {name: '设置', icon:'el-icon-setting', path: '/setting'}
             ]
