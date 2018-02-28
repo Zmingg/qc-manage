@@ -52,7 +52,7 @@
 <script>
 import { blogDetail, blogUpdate } from '../../api/blog';
 import { cateList } from '../../api/cate';
-import { domain, uploader } from '../../api/upload';
+import { domain, uploader } from '../../api/qiniu';
 import Quill from 'quill';
 import ImgSelect from '../../components/blog/img-select.vue';
 import ThumbPreview from '../../components/blog/thumb-preview.vue';

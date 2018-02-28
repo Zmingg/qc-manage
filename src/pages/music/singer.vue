@@ -6,7 +6,12 @@
                 {{ singer.name }}
             </li>
         </ul>
-
+        <el-alert v-show="error!==''"
+            :title="error"
+            type="error"
+            :closable="false"
+            show-icon>
+        </el-alert>
         <div class="singer-form" v-show="creating || updating">
             <el-input class="input" v-model="singer.name" placeholder="请输入">
                 <i slot="suffix" class="el-input__icon">歌手姓名&nbsp</i>
@@ -39,7 +44,8 @@ export default {
             searchKey: '',
             searchResult: [],
             creating: false,
-            updating: false
+            updating: false,
+            error: ''
         }
     },
     mounted(){
@@ -81,14 +87,15 @@ export default {
         updateSinger: async function () {
             let res = await api.update(this.singer);
             if (res.ok) {
-                console.log(res)
+                this.reset();
             }
         },
         deleteSinger: async function () {
             let res = await api.delete(this.singer.sid);
             if (res.ok) {
-                this.getAllSingers();
                 this.reset();
+            } else {
+                this.error = res.data;
             }
         },
         createSinger: function () {
@@ -96,16 +103,15 @@ export default {
             this.creating = true;
         },
         saveSinger: async function () {
-            if (this.singer.name === '') {
+            if (this.singer.name === '')
                 return;
-            }
             let res = await api.create(this.singer);
             if (res.ok) {
-                this.getAllSingers();
                 this.reset();
             }
         },
         reset: function () {
+            this.error = '';
             this.searchKey = '';
             this.searchResult = [];
             this.singer = {
@@ -114,6 +120,7 @@ export default {
                 summary: ''
             };
             this.creating = this.updating = false;
+            this.getAllSingers();
         }
     }
 }

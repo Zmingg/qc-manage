@@ -12,13 +12,8 @@
     </div>
 </template>
 <script>
-import { uploader } from '../../api/upload';
-import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
-import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+import { uploader } from '../../api/qiniu';
 export default {
-    components: {
-        ElInput,
-        ElButton},
     data(){
         return {
             url: ''

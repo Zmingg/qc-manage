@@ -20,8 +20,6 @@
                             <el-button slot="append" icon="el-icon-upload2" @click="selectLyric(audio)"></el-button>
                         </el-input>
 
-
-
                         <el-select v-model="audio.sids" multiple filterable placeholder="请选择">
                             <el-option
                                     v-for="singer in singers"
@@ -46,9 +44,8 @@
     </div>
 </template>
 <script>
-import { serverMusic, domain, uploader, uploadToken, upload } from '../../api/upload';
-import { apiSingers, apiDiscs, apiAudioCreate } from '../../api/music';
-import * as qiniu from 'qiniu-js';
+import { upload } from '../../api/qiniu';
+import Api from '../../api/music/music';
 export default {
     data() {
         return {
@@ -68,19 +65,19 @@ export default {
 
     methods: {
         getSingers: async function () {
-            let res = await apiSingers();
+            let res = await Api.singer.all();
             if (res.ok) {
                 this.singers = res.data;
             }
         },
         getDiscs: async function () {
-            let res = await apiDiscs();
+            let res = await Api.disc.all();
             if (res.ok) {
                 this.discs = res.data;
             }
         },
         saveAudio: async function (audio) {
-            let res = apiAudioCreate({
+            let res = await Api.audio.create({
                 title: audio.title,
                 sub_title: audio.sub_title,
                 did: audio.did,
@@ -88,6 +85,16 @@ export default {
                 lyric: audio.lyric,
                 sids: audio.sids
             });
+            if (res.ok) {
+                let audios = this.audios;
+                for (let i in audios) {
+                    if(!audios.hasOwnProperty(i))
+                        continue;
+                    if (audios[i].name === audio.name) {
+                        audios.splice(i, 1);
+                    }
+                }
+            }
         },
         selectAudio: function () {
             let input = document.getElementById('audio-upload');
@@ -107,7 +114,7 @@ export default {
                 this.audios.push(audio);
                 let options = {
                     server: 'music',
-                    perfix: 'audio'
+                    prefix: 'audio'
                 };
                 upload(file, options, {
                     next(res){
@@ -118,7 +125,7 @@ export default {
                     },
                     complete(res){
                         input = null;
-                        audio.src = options.perfix + '/' + res.key;
+                        audio.src = res.key;
                     }
                 });
             };
@@ -148,13 +155,13 @@ export default {
         uploadLyric: function (file, callback) {
             let options = {
                 server: 'music',
-                perfix: 'lyric'
+                prefix: 'lyric'
             };
             upload(file, options, {
                 next(res){},
                 error(err){},
                 complete(res){
-                    callback(options.perfix + '/' + res.key)
+                    callback(res.key)
                 }
             })
         }
@@ -167,8 +174,5 @@ h5 {
 }
 .input {
     margin-bottom: 5px;
-}
-.state {
-
 }
 </style>
