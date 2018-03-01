@@ -24,9 +24,9 @@ export default {
         }
     },
 
-    async get(did){
+    async get(lid){
         try {
-            let res = await fetch(base + 'list/' + did);
+            let res = await fetch(base + 'list/' + lid);
             return await res.json();
         } catch (err) {
             return { ok:false, err:err };
@@ -69,10 +69,10 @@ export default {
         }
     },
 
-    async delete(did){
+    async delete(lid){
         try {
             let formData = new FormData();
-            formData.append('did', did);
+            formData.append('lid', lid);
             let res = await fetch(base + 'list', {
                 method: 'delete',
                 body: formData

@@ -116,7 +116,10 @@ export default {
         },
 
         async deleteList () {
-//            let res = await Api.list.delete(this.data);
+            let res = await Api.list.delete(this.data.lid);
+            if (res.ok) {
+                this.close();
+            }
         },
 
     }
