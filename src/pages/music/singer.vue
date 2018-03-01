@@ -66,7 +66,7 @@ export default {
             }
             let _result = [];
             for (let singer of this.singers) {
-                if (singer.name.indexOf(this.searchKey) >= 0) {
+                if (singer.name.toLowerCase().indexOf(this.searchKey.toLowerCase()) >= 0) {
                     _result.push(singer);
                 }
             }

@@ -110,7 +110,7 @@ export default {
             }
             let _result = [];
             for (let audio of this.audios) {
-                if (audio.title.indexOf(this.searchKey) >= 0) {
+                if (audio.title.toLowerCase().indexOf(this.searchKey.toLowerCase()) >= 0) {
                     _result.push(audio);
                 }
             }

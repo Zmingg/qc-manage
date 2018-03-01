@@ -12,6 +12,7 @@ import Music from './pages/music/index.vue';
 import MusicUpload from './pages/music/upload.vue';
 import MusicSinger from './pages/music/singer.vue';
 import MusicDisc from './pages/music/disc.vue';
+import MusicList from './pages/music/list.vue';
 import Setting from './pages/setting.vue';
 import storage from './lib/storage';
 
@@ -28,6 +29,7 @@ const router = new VueRouter({
             { name: 'music_upload', path: 'music/upload', component: MusicUpload },
             { name: 'music_singer', path: 'music/singer', component: MusicSinger },
             { name: 'music_disc', path: 'music/disc', component: MusicDisc },
+            { name: 'music_list', path: 'music/list', component: MusicList },
             { name: 'setting', path: 'setting', component: Setting },
         ]},
         { name: 'pass', path: '/pass', component: Pass }

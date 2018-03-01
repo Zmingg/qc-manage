@@ -83,7 +83,7 @@ export default {
             }
         },
         thumb: function() {
-            return domain.musicP + this.disc.img;
+            return domain.musicP + this.disc.img + '/thumb';
         }
     },
     mounted(){
@@ -111,7 +111,7 @@ export default {
             }
             let _result = [];
             for (let disc of this.discs) {
-                if (disc.title.indexOf(this.searchKey) >= 0) {
+                if (disc.title.toLowerCase().indexOf(this.searchKey.toLowerCase()) >= 0) {
                     _result.push(disc);
                 }
             }

@@ -20,6 +20,7 @@ export default {
                     {name: '音乐上传', path: '/music/upload'},
                     {name: '管理歌手', path: '/music/singer'},
                     {name: '管理专辑', path: '/music/disc'},
+                    {name: '歌单管理', path: '/music/list'},
                 ]},
                 {name: '设置', icon:'el-icon-setting', path: '/setting'}
             ]
