@@ -29,8 +29,10 @@
 
         <el-input size="small" class="input" disabled v-model="blog.thumb_img">
             <el-button slot="append" @click="thumbPreview">查看缩略图</el-button>
-            <el-button slot="append" id="thumb">重新上传</el-button>
+            <el-button slot="append" @click="imgUpload">重新上传</el-button>
         </el-input>
+
+        <input id="img-upload" type="file" hidden/>
 
         <el-input size="small" class="input-full"
                 type="textarea"
@@ -52,16 +54,12 @@
 <script>
 import { blogDetail, blogUpdate } from '../../api/blog';
 import { cateList } from '../../api/cate';
-import { domain, uploader } from '../../api/qiniu';
+import { domain, upload } from '../../api/qiniu';
 import Quill from 'quill';
 import ImgSelect from '../../components/blog/img-select.vue';
 import ThumbPreview from '../../components/blog/thumb-preview.vue';
-import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
-import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 export default {
     components: {
-        ElInput,
-        ElButton,
         ImgSelect,
         ThumbPreview
     },
@@ -94,11 +92,7 @@ export default {
     },
 
     mounted(){
-        let thumb = uploader('thumb','thumb');
-        thumb.bind('FileUploaded',(up, file, info)=>{
-            let res = JSON.parse(info.response);
-            this.blog.thumb_img = res.key;
-        });
+
     },
 
     methods: {
@@ -169,8 +163,35 @@ export default {
             this.quill.insertEmbed(this.range.index, 'image', url, 'image');
         },
         thumbPreview: function () {
-            this.$refs.thumb.$emit('open', domain + this.blog.thumb_img);
-        }
+            this.$refs.thumb.$emit('open', domain.blog + this.blog.thumb_img);
+        },
+        imgUpload: function () {
+            let input = document.getElementById('img-upload');
+            if (!input.onchange) {
+                input.onchange = () => {
+                    let file = input.files[0];
+                    let options = {
+                        server: 'blog',
+                        prefix: 'thumb'
+                    };
+                    let blog = this.blog;
+                    upload(file, options, {
+                        next(res){},
+                        error(err){
+                            console.log(err)
+                        },
+                        complete(res){
+                            blog.thumb_img = res.key;
+                        }
+                    });
+                };
+            }
+            let clickTime = setTimeout(()=>{
+                clearTimeout(clickTime);
+                clickTime = null;
+                input.click();
+            }, 500);
+        },
 
     }
 }

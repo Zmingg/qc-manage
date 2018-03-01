@@ -2,33 +2,23 @@
     <div class="box" @click="clickHandle">
         <div class="warp"></div>
         <div class="frame">
-            <el-button id="image" size="mini">本地上传</el-button>
+            <el-button size="mini" @click="upload">本地上传</el-button>
             <div class="row">
                 <el-input v-model="url" size="mini">
                     <el-button slot="append" @click="insertUrl">插入</el-button>
                 </el-input>
             </div>
+            <input id="upload" type="file" hidden/>
         </div>
     </div>
 </template>
 <script>
-import { uploader } from '../../api/qiniu';
+import { domain, upload } from '../../api/qiniu';
 export default {
     data(){
         return {
             url: ''
         }
-    },
-
-    mounted(){
-        let up = uploader('image','image');
-        up.bind('FileUploaded',(up, file, info)=>{
-             let domain = up.getOption('domain');
-             let res = JSON.parse(info.response);
-             let link = domain + res.key;
-             this.$emit('insert', link);
-             this.$emit('close');
-        });
     },
 
     methods: {
@@ -42,7 +32,36 @@ export default {
                 this.$emit('insert', this.url);
             }
             this.$emit('close');
-        }
+        },
+        upload: function () {
+            let input = document.getElementById('upload');
+            if (!input.onchange) {
+                input.onchange = () => {
+                    let file = input.files[0];
+                    let options = {
+                        server: 'blog',
+                        prefix: 'image'
+                    };
+                    let el = this;
+                    upload(file, options, {
+                        next(res){},
+                        error(err){
+                            console.log(err)
+                        },
+                        complete(res){
+                            let link = domain.blog + res.key;
+                            el.$emit('insert', link);
+                            el.$emit('close');
+                        }
+                    });
+                };
+            }
+            let clickTime = setTimeout(()=>{
+                clearTimeout(clickTime);
+                clickTime = null;
+                input.click();
+            }, 500);
+        },
     }
 
 }
