@@ -1,10 +1,10 @@
 import 'babel-polyfill';
 const serverBlog = 'http://127.0.0.1:3000/';
 const serverMusic = 'http://127.0.0.1:3001/';
-let domain = {};
+const domain = {};
 domain.blog = 'http://p04p94ehj.bkt.clouddn.com/';
-domain.musicP = 'http://oxjyut4f0.bkt.clouddn.com/';
-domain.musicS = 'http://ow7kqez1l.bkt.clouddn.com/';
+domain.music = 'http://oxjyut4f0.bkt.clouddn.com/';
+
 import * as qiniu from 'qiniu-js';
 
 const uploadToken = async (server, prefix) => {

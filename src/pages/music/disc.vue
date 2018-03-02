@@ -83,7 +83,7 @@ export default {
             }
         },
         thumb: function() {
-            return domain.musicP + this.disc.img + '/thumb';
+            return domain.music + this.disc.img + '/thumb';
         }
     },
     mounted(){
