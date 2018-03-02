@@ -42,7 +42,6 @@ export default {
         signIn: async function () {
             let res = await this.signInAct(this.user);
             if (res.ok) {
-                console.log('push')
                 this.$router.push({
                     path: '/'
                 });
