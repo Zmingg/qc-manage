@@ -20,7 +20,7 @@
                 <el-button slot="append" icon="el-icon-upload2" @click="selectLyric"></el-button>
             </el-input>
 
-            <el-select class="input short" v-model="sidsArr" multiple filterable placeholder="请选择">
+            <el-select class="input" v-model="sidsArr" multiple filterable placeholder="请选择">
                 <el-option
                         v-for="singer in singers"
                         :key="singer.sid"
@@ -36,6 +36,7 @@
                         :value="disc.did">
                 </el-option>
             </el-select>
+            <el-checkbox v-model="audio.hq" label="HQ" border :true-label="1" :false-label="0"></el-checkbox>
             <div class="control">
                 <el-button class="button" type="success" @click="updateAudio">确认修改</el-button>
                 <el-button class="button" type="danger" @click="deleteAudio">删除曲目</el-button>

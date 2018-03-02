@@ -20,7 +20,7 @@
                             <el-button slot="append" icon="el-icon-upload2" @click="selectLyric(audio)"></el-button>
                         </el-input>
 
-                        <el-select v-model="audio.sids" multiple filterable placeholder="请选择">
+                        <el-select class="input" v-model="audio.sids" multiple filterable placeholder="请选择">
                             <el-option
                                     v-for="singer in singers"
                                     :key="singer.sid"
@@ -36,6 +36,7 @@
                                     :value="disc.did">
                             </el-option>
                         </el-select>
+                        <el-checkbox v-model="audio.hq" label="HQ" border :true-label="1" :false-label="0"></el-checkbox>
                         <el-button type="success" @click="saveAudio(audio)"> 保存 </el-button>
                     </el-collapse-item>
                 </el-collapse>
@@ -83,6 +84,7 @@ export default {
                 did: audio.did,
                 src: audio.src,
                 lyric: audio.lyric,
+                hq: audio.hq,
                 sids: audio.sids
             });
             if (res.ok) {
@@ -174,5 +176,6 @@ h5 {
 }
 .input {
     margin-bottom: 5px;
+    width: 100%;
 }
 </style>
