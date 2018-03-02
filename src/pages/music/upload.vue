@@ -110,6 +110,7 @@ export default {
                     did: 1,
                     src: '',
                     lyric: '',
+                    hq: 0,
                     percent: 0
                 };
 
