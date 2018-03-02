@@ -60,7 +60,7 @@ export default {
             }
         },
         thumb: function() {
-            return domain.musicP + this.data.img + '/thumb';
+            return domain.music + this.data.img + '/thumb';
         }
     },
     mounted() {
